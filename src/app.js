@@ -22,7 +22,7 @@ function inviteUser(action) {
         var SLACK_INVITE_ENDPOINT = 'https://slack.com/api/users.admin.invite';
 
         var QUERY_PARAMS = `email=${action.params.EMAIL}&token=${action.params.SLACK_TOKEN}`;
-        if (action.params.channel)
+        if (action.params.CHANNEL)
             QUERY_PARAMS += `&channels=${action.params.CHANNEL}`;
         QUERY_PARAMS += `&set_active=true`
 

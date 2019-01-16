@@ -1,23 +1,19 @@
-const { WebClient } = require('@slack/client');
 const request = require('request');
 const slack = require('slack')
 
 
 function sendMessage(action) {
     return new Promise((resolve, reject) => {
-        const web = new WebClient(action.params.SLACK_TOKEN);
-
-        web.chat.postMessage({ channel: action.params.CHANNEL, text: action.params.TEXT })
-            .then((res) => {
-                return resolve(res);
-            }).catch(err => {
-                return reject(err)
-            });
+        slack.chat.postMessage({ token: action.params.SLACK_TOKEN, channel: action.params.CHANNEL, text: action.params.TEXT }).then((res) => {
+            return resolve(res);
+        }).catch(err => {
+            return reject(err)
+        });
     })
 
 }
 
-function inviteUser(action) {
+function createUser(action) {
     return new Promise((resolve, reject) => {
         var SLACK_INVITE_ENDPOINT = 'https://slack.com/api/users.admin.invite';
 
@@ -62,7 +58,7 @@ function groupInvite(action) {
 
 module.exports = {
     sendMessage: sendMessage,
-    inviteUser: inviteUser,
+    createUser: createUser,
     createGroup: createGroup,
     groupInvite: groupInvite
 }

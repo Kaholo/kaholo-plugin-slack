@@ -6,6 +6,13 @@
     "main": "app.js",
     "version": "1.0.0",
     "imgUrl": "Slack_Icon.png",
+    "settings":[
+        {
+            "name":"TOKEN",
+            "viewName":"token",
+            "type":"vault"
+        }
+    ],
     "methods": [{
         "name": "sendMessage",
         "viewName": "send message",
@@ -17,7 +24,7 @@
             },
             {
                 "name": "CHANNEL",
-                "viewName": "channel",
+                "viewName": "channel/group id",
                 "type": "string"
             },
             {
@@ -27,7 +34,7 @@
             }
         ]   
     },{
-        "name": "inviteUser",
+        "name": "createUser",
         "viewName": "create user",
         "params": [
             {
@@ -42,7 +49,7 @@
             },
             {
                 "name": "CHANNEL",
-                "viewName": "channel",
+                "viewName": "channels/groups separated by a comma",
                 "type": "string"
             }
         ]   
@@ -73,12 +80,12 @@
             },
             {
                 "name": "CHANNEL",
-                "viewName": "cannel",
+                "viewName": "group id",
                 "type": "string"
             },
             {
                 "name": "USER_ID",
-                "viewName": "user_id",
+                "viewName": "user id",
                 "type": "string"
             }
         ]   

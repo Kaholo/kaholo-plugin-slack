@@ -1,18 +1,19 @@
 const request = require('request');
 const slack = require('slack')
 
+function _getToken(action, settings){
+    return action.params.SLACK_TOKEN? action.params.SLACK_TOKEN : settings.SLACK_TOKEN;
+}
 
 function sendMessage(action, settings) {
-     action.params.SLACK_TOKEN? token =  action.params.SLACK_TOKEN : token =  settings.SLACK_TOKEN;
-     return slack.chat.postMessage({ token: token, channel: action.params.CHANNEL, text: action.params.TEXT });
+     return slack.chat.postMessage({ token: _getToken(action,settings), channel: action.params.CHANNEL, text: action.params.TEXT });
 }
 
 function createUser(action, settings) {
-    action.params.SLACK_TOKEN? token =  action.params.SLACK_TOKEN : token =  settings.SLACK_TOKEN;
     return new Promise((resolve, reject) => {
         var SLACK_INVITE_ENDPOINT = 'https://slack.com/api/users.admin.invite';
 
-        var QUERY_PARAMS = `email=${action.params.EMAIL}&token=${token}`;
+        var QUERY_PARAMS = `email=${action.params.EMAIL}&token=${_getToken(action,settings)}`;
         if (action.params.CHANNEL)
             QUERY_PARAMS += `&channels=${action.params.CHANNEL}`;
         QUERY_PARAMS += `&set_active=true`
@@ -32,14 +33,12 @@ function createUser(action, settings) {
 
 
 function createGroup(action, settings) {
-    action.params.SLACK_TOKEN? token =  action.params.SLACK_TOKEN : token =  settings.SLACK_TOKEN;
-    return slack.groups.create({ token: token, name: action.params.NAME });
+    return slack.groups.create({ token: _getToken(action,settings), name: action.params.NAME });
 }
 
 
 function groupInvite(action, settings) {
-    action.params.SLACK_TOKEN? token =  action.params.SLACK_TOKEN : token =  settings.SLACK_TOKEN;
-    return slack.groups.invite({ token: token, channel: action.params.CHANNEL, user: action.params.USER_ID });
+    return slack.groups.invite({ token: _getToken(action,settings), channel: action.params.CHANNEL, user: action.params.USER_ID });
 }
 
 
@@ -49,5 +48,3 @@ module.exports = {
     createGroup: createGroup,
     groupInvite: groupInvite
 }
-
-

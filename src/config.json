@@ -1,87 +1,97 @@
 {
     "name": "Slack",
     "type": "executer",
-    "description" : "",
+    "description": "",
     "execProgram": "node",
     "main": "app.js",
     "version": "1.0.0",
     "imgUrl": "Slack_Icon.png",
-    "methods": [{
-        "name": "sendMessage",
-        "viewName": "send message",
-        "params": [
-            {
-                "name": "SLACK_TOKEN",
-                "viewName": "token",
-                "type": "vault"
-            },
-            {
-                "name": "CHANNEL",
-                "viewName": "channel",
-                "type": "string"
-            },
-            {
-                "name": "TEXT",
-                "viewName": "text",
-                "type": "string"
-            }
-        ]   
-    },{
-        "name": "inviteUser",
-        "viewName": "create user",
-        "params": [
-            {
-                "name": "SLACK_TOKEN",
-                "viewName": "token",
-                "type": "vault"
-            },
-            {
-                "name": "EMAIL",
-                "viewName": "email",
-                "type": "string"
-            },
-            {
-                "name": "CHANNEL",
-                "viewName": "channel",
-                "type": "string"
-            }
-        ]   
-    },{
-        "name": "createGroup",
-        "viewName": "create group",
-        "params": [
-            {
-                "name": "SLACK_TOKEN",
-                "viewName": "token",
-                "type": "vault"
-            },
-            {
-                "name": "NAME",
-                "viewName": "name",
-                "type": "string"
-            }
-        ]   
-    },
-    {
-        "name": "groupInvite",
-        "viewName": "invite user to group",
-        "params": [
-            {
-                "name": "SLACK_TOKEN",
-                "viewName": "token",
-                "type": "vault"
-            },
-            {
-                "name": "CHANNEL",
-                "viewName": "cannel",
-                "type": "string"
-            },
-            {
-                "name": "USER_ID",
-                "viewName": "user_id",
-                "type": "string"
-            }
-        ]   
-    }
-]
+    "settings": [
+        {
+            "name": "SLACK_TOKEN",
+            "viewName": "token",
+            "type": "vault"
+        }
+    ],
+    "methods": [
+        {
+            "name": "sendMessage",
+            "viewName": "send message",
+            "params": [
+                {
+                    "name": "SLACK_TOKEN",
+                    "viewName": "token",
+                    "type": "vault"
+                },
+                {
+                    "name": "CHANNEL",
+                    "viewName": "channel/group id",
+                    "type": "string"
+                },
+                {
+                    "name": "TEXT",
+                    "viewName": "text",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "createUser",
+            "viewName": "create user",
+            "params": [
+                {
+                    "name": "SLACK_TOKEN",
+                    "viewName": "token",
+                    "type": "vault"
+                },
+                {
+                    "name": "EMAIL",
+                    "viewName": "email",
+                    "type": "string"
+                },
+                {
+                    "name": "CHANNEL",
+                    "viewName": "channels/groups separated by a comma",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "createGroup",
+            "viewName": "create group",
+            "params": [
+                {
+                    "name": "SLACK_TOKEN",
+                    "viewName": "token",
+                    "type": "vault"
+                },
+                {
+                    "name": "NAME",
+                    "viewName": "name",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "groupInvite",
+            "viewName": "invite user to group",
+            "params": [
+                {
+                    "name": "SLACK_TOKEN",
+                    "viewName": "token",
+                    "type": "vault"
+                },
+                {
+                    "name": "CHANNEL",
+                    "viewName": "group id",
+                    "type": "string"
+                },
+                {
+                    "name": "USER_ID",
+                    "viewName": "user id",
+                    "type": "string"
+                }
+            ]
+        }
+    ]
 }

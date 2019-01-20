@@ -1,36 +1,30 @@
-const { WebClient } = require('@slack/client');
 const request = require('request');
 const slack = require('slack')
 
-
-function sendMessage(action) {
-    return new Promise((resolve, reject) => {
-        const web = new WebClient(action.params.SLACK_TOKEN);
-
-        web.chat.postMessage({ channel: action.params.CHANNEL, text: action.params.TEXT })
-            .then((res) => {
-                return resolve(res);
-            }).catch(err => {
-                return reject(err)
-            });
-    })
-
+function _getToken(action, settings){
+    return action.params.SLACK_TOKEN? action.params.SLACK_TOKEN : settings.SLACK_TOKEN;
 }
 
-function inviteUser(action) {
+function sendMessage(action, settings) {
+     return slack.chat.postMessage({ token: _getToken(action,settings), channel: action.params.CHANNEL, text: action.params.TEXT });
+}
+
+function createUser(action, settings) {
     return new Promise((resolve, reject) => {
         var SLACK_INVITE_ENDPOINT = 'https://slack.com/api/users.admin.invite';
 
-        var QUERY_PARAMS = `email=${action.params.EMAIL}&token=${action.params.SLACK_TOKEN}`;
+        var QUERY_PARAMS = `email=${action.params.EMAIL}&token=${_getToken(action,settings)}`;
         if (action.params.CHANNEL)
             QUERY_PARAMS += `&channels=${action.params.CHANNEL}`;
         QUERY_PARAMS += `&set_active=true`
 
         request.get(`${SLACK_INVITE_ENDPOINT}?${QUERY_PARAMS}`, function (error, response, body) {
-            error ? console.log("error", error.toJSON()) : null;
+            if (error) return reject(error);
+
             if (body.includes("error")) {
                 return reject(body)
             }
+
             return resolve(body)
         });
     })
@@ -38,33 +32,19 @@ function inviteUser(action) {
 
 
 
-function createGroup(action) {
-    return new Promise((resolve, reject) => {
-        slack.groups.create({ token: action.params.SLACK_TOKEN, name: action.params.NAME }).then(res => {
-            return resolve(res)
-        }).catch(error => {
-            return reject(error)
-        })
-    })
+function createGroup(action, settings) {
+    return slack.groups.create({ token: _getToken(action,settings), name: action.params.NAME });
 }
 
 
-function groupInvite(action) {
-    return new Promise((resolve, reject) => {
-        slack.groups.invite({ token: action.params.SLACK_TOKEN, channel: action.params.CHANNEL, user: action.params.USER_ID }).then(res => {
-            return resolve(res)
-        }).catch(error => {
-            return reject(error)
-        })
-    })
+function groupInvite(action, settings) {
+    return slack.groups.invite({ token: _getToken(action,settings), channel: action.params.CHANNEL, user: action.params.USER_ID });
 }
 
 
 module.exports = {
     sendMessage: sendMessage,
-    inviteUser: inviteUser,
+    createUser: createUser,
     createGroup: createGroup,
     groupInvite: groupInvite
 }
-
-

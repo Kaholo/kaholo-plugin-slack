@@ -41,10 +41,33 @@ function groupInvite(action, settings) {
     return slack.groups.invite({ token: _getToken(action,settings), channel: action.params.CHANNEL, user: action.params.USER_ID });
 }
 
+function sendIncomingWebhook(action,settings){
+    return new Promise((resolve,reject)=>{
+        
+        if(typeof action.params.message == 'string'){
+            action.params.message = {text: action.params.message}
+        }
+
+        const requestOptions = {
+            url: action.params.webhookUrl,
+            method: "post",
+            json : true,
+            body: action.params.message
+        }
+        
+        request(requestOptions, function (error, response, body) {
+            if (error) return reject(error);
+            if(response.statusCode !== 200) return reject(response);
+            
+            return resolve(body)
+        });
+    })
+}
 
 module.exports = {
     sendMessage: sendMessage,
     createUser: createUser,
     createGroup: createGroup,
-    groupInvite: groupInvite
+    groupInvite: groupInvite,
+    sendIncomingWebhook: sendIncomingWebhook
 }

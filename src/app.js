@@ -14,8 +14,10 @@ function createUser(action, settings) {
         var SLACK_INVITE_ENDPOINT = 'https://slack.com/api/users.admin.invite';
 
         var QUERY_PARAMS = `email=${action.params.EMAIL}&token=${_getToken(action,settings)}`;
-        if (action.params.CHANNEL)
-            QUERY_PARAMS += `&channels=${action.params.CHANNEL}`;
+        if (action.params.CHANNEL){
+            const channels = action.params.CHANNEL.trim().split("\n").join(",");
+            QUERY_PARAMS += `&channels=${channels}`;
+        }
         QUERY_PARAMS += `&set_active=true`
 
         request.get(`${SLACK_INVITE_ENDPOINT}?${QUERY_PARAMS}`, function (error, response, body) {

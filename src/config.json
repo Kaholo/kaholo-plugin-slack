@@ -1,37 +1,41 @@
 {
     "name": "Slack",
     "type": "executer",
-    "description": "",
+    "description": "Kaholo plugin for interaction with Slack API.",
     "execProgram": "node",
     "main": "app.js",
-    "version": "1.1.0",
-    "imgUrl": "Slack_Icon.png",
+    "version": "1.1.1",
+    "imgUrl": "logo.png",
     "settings": [
         {
             "name": "SLACK_TOKEN",
-            "viewName": "token",
-            "type": "vault"
+            "viewName": "Access Token",
+            "type": "vault",
+            "description": "Default Slack access token to use for authentication if no other token was provided."
         }
     ],
     "methods": [
         {
             "name": "sendMessage",
-            "viewName": "send message",
+            "viewName": "Send Message",
             "params": [
                 {
                     "name": "SLACK_TOKEN",
-                    "viewName": "token",
-                    "type": "vault"
+                    "viewName": "Access Token",
+                    "type": "vault",
+                    "description": "Slack access token to use for authentication for this request only."
                 },
                 {
                     "name": "CHANNEL",
-                    "viewName": "channel/group id",
-                    "type": "string"
+                    "viewName": "Channel/Group ID",
+                    "type": "string",
+                    "description": "The ID of the channel or the group to send the message to."
                 },
                 {
                     "name": "TEXT",
-                    "viewName": "text",
-                    "type": "string"
+                    "viewName": "Text",
+                    "type": "string",
+                    "description": "The content of the message."
                 }
             ]
         },
@@ -42,70 +46,80 @@
                 {
                     "name": "webhookUrl",
                     "viewName": "Webhook URL",
-                    "type": "vault"
+                    "type": "vault",
+                    "description": "The URL of the webhook to send the message to."
                 },
                 {
                     "name": "message",
-                    "viewName": "Message (string, object)",
-                    "type": "string"
+                    "viewName": "Message",
+                    "type": "string",
+                    "description": "The message to send. Can either be normal text, or you can pass an object from code."
                 }
             ]
         },
         {
             "name": "createUser",
-            "viewName": "create user",
+            "viewName": "Create User",
             "params": [
                 {
                     "name": "SLACK_TOKEN",
-                    "viewName": "token",
-                    "type": "vault"
+                    "viewName": "Token",
+                    "type": "vault",
+                    "description": "Slack access token to use for authentication for this request only."
                 },
                 {
                     "name": "EMAIL",
-                    "viewName": "email",
-                    "type": "string"
+                    "viewName": "Email",
+                    "type": "string",
+                    "description": "The email of the new user to be created."
                 },
                 {
                     "name": "CHANNEL",
-                    "viewName": "channels/groups separated by a comma",
-                    "type": "string"
+                    "viewName": "Channel/Group IDs",
+                    "type": "text",
+                    "description": "If provided, will add the user to the provided channels and groups. Can enter multiple values by separating each with a new line or comma."
                 }
             ]
         },
         {
             "name": "createGroup",
-            "viewName": "create group",
+            "viewName": "Create Group",
             "params": [
                 {
                     "name": "SLACK_TOKEN",
-                    "viewName": "token",
-                    "type": "vault"
+                    "viewName": "Token",
+                    "type": "vault",
+                    "description": "Slack access token to use for authentication for this request only."
                 },
                 {
                     "name": "NAME",
-                    "viewName": "name",
-                    "type": "string"
+                    "viewName": "Name",
+                    "type": "string",
+                    "description": "The name of the group to be created."
                 }
             ]
         },
         {
             "name": "groupInvite",
-            "viewName": "invite user to group",
+            "viewName": "Invite User To Group",
             "params": [
                 {
                     "name": "SLACK_TOKEN",
-                    "viewName": "token",
-                    "type": "vault"
+                    "viewName": "Token",
+                    "type": "vault",
+                    "description": "Slack access token to use for authentication for this request only."
                 },
                 {
                     "name": "CHANNEL",
-                    "viewName": "group id",
-                    "type": "string"
+                    "viewName": "Group ID",
+                    "type": "string",
+                    "description": "The ID of the group to invite the user to."
                 },
                 {
                     "name": "USER_ID",
-                    "viewName": "user id",
-                    "type": "string"
+                    "viewName": "User ID",
+                    "type": "string",
+                    "description": "The ID of the user to be invited to the group."
                 }
             ]
         }

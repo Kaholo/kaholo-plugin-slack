@@ -1,15 +1,15 @@
 {
-  "name": "kaholo-plugin-slack",
-  "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Kaholo Team",
-  "license": "ISC",
-  "dependencies": {
-    "request": "2.88.0",
-    "slack": "11.0.1"
-  }
+	"name": "kaholo-plugin-slack",
+	"version": "1.1.2",
+	"description": "Kaholo plugin for integration with Slack API.",
+	"main": "app.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "Kaholo Group(Amit Alon)",
+	"license": "ISC",
+	"dependencies": {
+		"slack": "^11.0.2",
+		"node-fetch": "2.6.6"
+	}
 }

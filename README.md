@@ -1,43 +1,93 @@
 # kaholo-plugin-slack
 Kaholo plugin for integration with Slack API.
 
-## Settings
-1. Access Token (Vault) **Required if not in action** - Default Slack access token to use for authentication if no other token was provided. You can see more info on Slack access tokens [here](https://api.slack.com/authentication/token-types).
+## How To Use
+In order for this plugin to work properly you need to create a slack app, install it on your workspace and get the Oauth token from the app. It can be either the Bot or User token of the app.
+The full list of scopes of permissions the app will need is:
+* channels:read
+* channels:write
+* chat:write
+* groups:read
+* im:read
+* mpim:read
+* usergroups:read
+* usergroups:write
+* users:read
 
-## Method: Send Message
-Send a message in the specified channel or group.
+##  Settings
+1. Access Token (Vault) **Required if not in action** - Default Slack access token to use for authentication if no other token was provided.
+    
 
-### Parameters
-1. Access Token (Vault) **Required if not in settings** - Slack access token to use for authentication for this request only.
-2. Channel/Group ID (String) **Required** - The ID of the channel or the group to send the message to.
-3. Text (String) **Required** - The content of the message.
+## Method: Send Message To Channel
+Send a message in the specified channel.
+
+## Parameters
+1. Access Token (Vault) **Required if not in settings** - Access token to authenticate.
+    [Learn More](https://api.slack.com/authentication/token-types)
+2. Channel (Autocomplete) **Required** - Send the message to this channel.
+    [Learn More](https://api.slack.com/types/channel)
+3. Text (text) **Required** - Message content.
+    [Learn More](https://slack.com/help/categories/200111606)
+
+## Method: Send Message To User
+Send a message to specified user.
+
+## Parameters
+1. Access Token (Vault) **Required if not in settings** - Access token to authenticate.
+    [Learn More](https://api.slack.com/authentication/token-types)
+2. User (Autocomplete) **Required** - Send the message to this user.
+    [Learn More](https://api.slack.com/types/channel)
+3. Text (text) **Required** - Message content.
+    [Learn More](https://slack.com/help/categories/200111606)
 
 ## Method: Send Incoming Webhook
-Send a message to slack using the specified webhook.
+Send a message to the specified incoming Webhook
+(No acces token required)
 
-### Parameters
-1. Webhook URL (Vault) **Required** - The URL of the webhook to send the message to.
-2. Message (String|Object) **Required** - The message to send. Can either be normal text, or you can pass an object from code. You can see more info on the accepted format of object [here](https://api.slack.com/messaging/webhooks#advanced_message_formatting)
+## Parameters
+1. Webhook URL (Vault) **Required** - The URL of the webhook to send the message.
+    [Learn More](https://api.slack.com/messaging/webhooks)
+2. Message (String) **Required** - The message to send. Can either be normal text, or you can pass an object from code.
+    [Learn More](https://api.slack.com/messaging/webhooks#advanced_message_formatting)
 
-## Method: Create User
-Create a new slack user.
 
-### Parameters
-1. Access Token (Vault) **Required if not in settings** - Slack access token to use for authentication for this request only.
-2. Email (String) **Required** - The email of the new user to be created.
-3. Channel/Group IDs (Text) **Optional** - If provided, will add the user to the provided channels and groups. Can enter multiple values by separating each with a new line or comma.
+## Method: Create User Group
+Create a new user group
 
-## Method: Create Group
-Create a new slack group.
+## Parameters
+1. Access Token (Vault) **Required if not in settings** - Access token to authenticate.
+    [Learn More](https://api.slack.com/authentication/token-types)
+2. Name (String) **Required** - Name for the created user group.
+    [Learn More](https://slack.com/help/articles/212906697-Create-a-user-group)
 
-### Parameters
-1. Access Token (Vault) **Required if not in settings** - Slack access token to use for authentication for this request only.
-2. Name (String) **Required** - The name of the group to be created.
+## Method: Add Users To User Group
+Add the specified users to the user group.
 
-## Method: Invite User To Group
-Invite the specified user to the specified group.
+## Parameters
+1. Access Token (Vault) **Required if not in settings** - Access token to authenticate.
+    [Learn More](https://api.slack.com/authentication/token-types)
+2. Group (Autocomplete) **Required** - Add the user to the specified group.
+    [Learn More](https://api.slack.com/types/group)
+3. Users (Autocomplete) **Required** - The user(s) to add to the group. Can enter multiple values by passing an array of user IDs from code.
+    [Learn More](https://api.slack.com/methods/users.identity)
 
-### Parameters
-1. Access Token (Vault) **Required if not in settings** - Slack access token to use for authentication for this request only.
-2. Group ID (String) **Required** - The ID of the group to invite the user to.
-3. User ID (String) **Required** - The ID of the user to be invited to the group.
+## Method: List Channels
+List all channels the user has access to in the current workspace.
+
+## Parameters
+1. Access Token (Vault) **Required if not in settings** - Access token to authenticate.
+    [Learn More](https://api.slack.com/authentication/token-types)
+
+## Method: List Groups
+List all user groups in the current workspace.
+
+## Parameters
+1. Access Token (Vault) **Required if not in settings** - Access token to authenticate.
+    [Learn More](https://api.slack.com/authentication/token-types)
+
+## Method: List Users
+List all users in the current workspace.
+
+## Parameters
+1. Access Token (Vault) **Required if not in settings** - Access token to authenticate.
+    [Learn More](https://api.slack.com/authentication/token-types)

@@ -1,75 +1,76 @@
-const request = require('request');
-const slack = require('slack')
+const parsers = require("./parsers");
+const SlackService = require('./slack.service');
 
-function _getToken(action, settings){
-    return action.params.SLACK_TOKEN? action.params.SLACK_TOKEN : settings.SLACK_TOKEN;
+async function sendMessageToChannel(action, settings){
+    const { CHANNEL: channel, group, TEXT: msg } = action.params;
+    const slackService = SlackService.from(action.params, settings);
+    return slackService.sendMessage({
+        channel: parsers.autocomplete(channel),
+        group: parsers.autocomplete(group),
+        msg
+    });
 }
 
-function sendMessage(action, settings) {
-     return slack.chat.postMessage({ token: _getToken(action,settings), channel: action.params.CHANNEL, text: action.params.TEXT });
+async function sendMessageToUser(action, settings){
+    const { user, group, TEXT: msg } = action.params;
+    const slackService = SlackService.from(action.params, settings);
+    return slackService.sendMessage({
+        channel: parsers.autocomplete(user),
+        group: parsers.autocomplete(group),
+        msg
+    });
 }
 
-function createUser(action, settings) {
-    return new Promise((resolve, reject) => {
-        var SLACK_INVITE_ENDPOINT = 'https://slack.com/api/users.admin.invite';
-
-        var QUERY_PARAMS = `email=${action.params.EMAIL}&token=${_getToken(action,settings)}`;
-        if (action.params.CHANNEL){
-            const channels = action.params.CHANNEL.trim().split("\n").join(",");
-            QUERY_PARAMS += `&channels=${channels}`;
-        }
-        QUERY_PARAMS += `&set_active=true`
-
-        request.get(`${SLACK_INVITE_ENDPOINT}?${QUERY_PARAMS}`, function (error, response, body) {
-            if (error) return reject(error);
-
-            if (body.includes("error")) {
-                return reject(body)
-            }
-
-            return resolve(body)
-        });
-    })
+async function sendIncomingWebhook(action, settings){
+    const { webhookUrl, message } = action.params;
+    const slackService = SlackService.from(action.params, settings);
+    return slackService.sendIncomingWebhook({
+        webhookUrl: parsers.string(webhookUrl),
+        message: parsers.string(message)
+    });
 }
 
-
-
-function createGroup(action, settings) {
-    return slack.groups.create({ token: _getToken(action,settings), name: action.params.NAME });
+async function createGroup(action, settings){
+    const { NAME: name } = action.params;
+    const slackService = SlackService.from(action.params, settings);
+    return slackService.createGroup({
+        name: parsers.string(name)
+    });
 }
 
-
-function groupInvite(action, settings) {
-    return slack.groups.invite({ token: _getToken(action,settings), channel: action.params.CHANNEL, user: action.params.USER_ID });
+async function groupInvite(action, settings){
+    const { CHANNEL: group, USER_ID: users } = action.params;
+    const slackService = SlackService.from(action.params, settings);
+    return slackService.groupInvite({
+        group: parsers.autocomplete(group),
+        users: parsers.autocompleteOrArray(users)
+    });
 }
 
-function sendIncomingWebhook(action,settings){
-    return new Promise((resolve,reject)=>{
-        
-        if(typeof action.params.message == 'string'){
-            action.params.message = {text: action.params.message}
-        }
-
-        const requestOptions = {
-            url: action.params.webhookUrl,
-            method: "post",
-            json : true,
-            body: action.params.message
-        }
-        
-        request(requestOptions, function (error, response, body) {
-            if (error) return reject(error);
-            if(response.statusCode !== 200) return reject(response);
-            
-            return resolve(body)
-        });
-    })
+async function listChannels(action, settings){
+    const slackService = SlackService.from(action.params, settings);
+    return slackService.listChannels();
 }
+
+async function listGroups(action, settings){
+    const slackService = SlackService.from(action.params, settings);
+    return slackService.listGroups();
+}
+
+async function listUsers(action, settings){
+    const slackService = SlackService.from(action.params, settings);
+    return slackService.listUsers();
+} 
 
 module.exports = {
-    sendMessage: sendMessage,
-    createUser: createUser,
-    createGroup: createGroup,
-    groupInvite: groupInvite,
-    sendIncomingWebhook: sendIncomingWebhook
+    sendMessageToChannel,
+    sendMessageToUser,
+	sendIncomingWebhook,
+	createGroup,
+	groupInvite,
+	listChannels,
+	listGroups,
+	listUsers,
+    // Autocomplete Functions
+    ...require("./autocomplete")
 }

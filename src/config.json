@@ -1,127 +1,207 @@
 {
-    "name": "Slack",
-    "type": "executer",
-    "description": "Kaholo plugin for interaction with Slack API.",
-    "execProgram": "node",
-    "main": "app.js",
-    "version": "1.1.1",
-    "imgUrl": "logo.png",
-    "settings": [
+  "name": "Slack",
+  "type": "executer",
+  "description": "Kaholo plugin for interaction with Slack API.",
+  "execProgram": "node",
+  "main": "app.js",
+  "version": "1.2.0",
+  "imgUrl": "logo.png",
+  "category": "NOTIFICATIONS",
+  "keywords": [
+    "msg",
+    "notification",
+    "notifications",
+    "message",
+    "messages",
+    "communication",
+    "group",
+    "send"
+  ],
+  "settings": [
+    {
+      "name": "SLACK_TOKEN",
+      "viewName": "Access Token",
+      "type": "vault",
+      "description": "Default Slack access token to use for authentication if no other token was provided."
+    }
+  ],
+  "methods": [
+    {
+      "name": "sendMessageToChannel",
+      "viewName": "Send Message To Channel",
+      "params": [
         {
-            "name": "SLACK_TOKEN",
-            "viewName": "Access Token",
-            "type": "vault",
-            "description": "Default Slack access token to use for authentication if no other token was provided."
+          "name": "SLACK_TOKEN",
+          "viewName": "Access Token",
+          "type": "vault",
+          "description": "Access token to authenticate.",
+          "learnUrl": "https://api.slack.com/authentication/token-types"
+        },
+        {
+          "name": "CHANNEL",
+          "viewName": "Channel",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listChannelsAuto",
+          "description": "Send the message to this channel.",
+          "placeholder": "MyChannel",
+          "learnUrl": "https://api.slack.com/types/channel"
+        },
+        {
+          "name": "TEXT",
+          "viewName": "Text",
+          "type": "text",
+          "description": "Message content.",
+          "placeholder": "This is the message.",
+          "learnUrl": "https://slack.com/help/categories/200111606"
         }
-    ],
-    "methods": [
+      ]
+    },
+    {
+      "name": "sendMessageToUser",
+      "viewName": "Send Private Message To User",
+      "params": [
         {
-            "name": "sendMessage",
-            "viewName": "Send Message",
-            "params": [
-                {
-                    "name": "SLACK_TOKEN",
-                    "viewName": "Access Token",
-                    "type": "vault",
-                    "description": "Slack access token to use for authentication for this request only."
-                },
-                {
-                    "name": "CHANNEL",
-                    "viewName": "Channel/Group ID",
-                    "type": "string",
-                    "description": "The ID of the channel or the group to send the message to."
-                },
-                {
-                    "name": "TEXT",
-                    "viewName": "Text",
-                    "type": "string",
-                    "description": "The content of the message."
-                }
-            ]
+          "name": "SLACK_TOKEN",
+          "viewName": "Access Token",
+          "type": "vault",
+          "description": "Access token to authenticate.",
+          "learnUrl": "https://api.slack.com/authentication/token-types"
         },
         {
-            "name": "sendIncomingWebhook",
-            "viewName": "Send Incoming Webhook",
-            "params": [
-                {
-                    "name": "webhookUrl",
-                    "viewName": "Webhook URL",
-                    "type": "vault",
-                    "description": "The URL of the webhook to send the message to."
-                },
-                {
-                    "name": "message",
-                    "viewName": "Message",
-                    "type": "string",
-                    "description": "The message to send. Can either be normal text, or you can pass an object from code."
-                }
-            ]
+          "name": "user",
+          "viewName": "Recipient User",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listUsersAuto",
+          "description": "The user to send the message to.",
+          "placeholder": "John Smith",
+          "learnUrl": "https://api.slack.com/types/user"
         },
         {
-            "name": "createUser",
-            "viewName": "Create User",
-            "params": [
-                {
-                    "name": "SLACK_TOKEN",
-                    "viewName": "Token",
-                    "type": "vault",
-                    "description": "Slack access token to use for authentication for this request only."
-                },
-                {
-                    "name": "EMAIL",
-                    "viewName": "Email",
-                    "type": "string",
-                    "description": "The email of the new user to be created."
-                },
-                {
-                    "name": "CHANNEL",
-                    "viewName": "Channel/Group IDs",
-                    "type": "text",
-                    "description": "If provided, will add the user to the provided channels and groups. Can enter multiple values by separating each with a new line or comma."
-                }
-            ]
-        },
-        {
-            "name": "createGroup",
-            "viewName": "Create Group",
-            "params": [
-                {
-                    "name": "SLACK_TOKEN",
-                    "viewName": "Token",
-                    "type": "vault",
-                    "description": "Slack access token to use for authentication for this request only."
-                },
-                {
-                    "name": "NAME",
-                    "viewName": "Name",
-                    "type": "string",
-                    "description": "The name of the group to be created."
-                }
-            ]
-        },
-        {
-            "name": "groupInvite",
-            "viewName": "Invite User To Group",
-            "params": [
-                {
-                    "name": "SLACK_TOKEN",
-                    "viewName": "Token",
-                    "type": "vault",
-                    "description": "Slack access token to use for authentication for this request only."
-                },
-                {
-                    "name": "CHANNEL",
-                    "viewName": "Group ID",
-                    "type": "string",
-                    "description": "The ID of the group to invite the user to."
-                },
-                {
-                    "name": "USER_ID",
-                    "viewName": "User ID",
-                    "type": "string",
-                    "description": "The ID of the user to be invited to the group."
-                }
-            ]
+          "name": "TEXT",
+          "viewName": "Text",
+          "type": "text",
+          "description": "Message content.",
+          "placeholder": "This is the message.",
+          "learnUrl": "https://slack.com/help/categories/200111606"
         }
-    ]
+      ]
+    },
+    {
+      "name": "sendIncomingWebhook",
+      "viewName": "Send Incoming Webhook",
+      "params": [
+        {
+          "name": "webhookUrl",
+          "viewName": "Webhook URL",
+          "type": "vault",
+          "description": "The URL of the webhook to send the message.",
+          "placeholder": "https://hooks.slack.com/services/T00000000",
+          "learnUrl": "https://api.slack.com/messaging/webhooks"
+        },
+        {
+          "name": "message",
+          "viewName": "Message",
+          "type": "text",
+          "description": "The message to send. Can either be normal text, or you can pass an object from code.",
+          "placeholder": "This is the message.",
+          "learnUrl": "https://api.slack.com/messaging/webhooks#advanced_message_formatting"
+        }
+      ]
+    },
+    {
+      "name": "createGroup",
+      "viewName": "Create User Group",
+      "params": [
+        {
+          "name": "SLACK_TOKEN",
+          "viewName": "Access Token",
+          "type": "vault",
+          "description": "Access token to authenticate.",
+          "learnUrl": "https://api.slack.com/authentication/token-types"
+        },
+        {
+          "name": "NAME",
+          "viewName": "Name",
+          "type": "string",
+          "description": "Name for the created group.",
+          "placeholder": "group-name",
+          "learnUrl": "https://slack.com/help/articles/212906697-Create-a-user-group"
+        }
+      ]
+    },
+    {
+      "name": "groupInvite",
+      "viewName": "Add Users To User Group",
+      "params": [
+        {
+          "name": "SLACK_TOKEN",
+          "viewName": "Access Token",
+          "type": "vault",
+          "description": "Access token to authenticate.",
+          "learnUrl": "https://api.slack.com/authentication/token-types"
+        },
+        {
+          "name": "CHANNEL",
+          "viewName": "Group",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listGroupsAuto",
+          "description": "Invite the user to the specified group.",
+          "placeholder": "MyUserGroup",
+          "learnUrl": "https://api.slack.com/types/group"
+        },
+        {
+          "name": "USER_ID",
+          "viewName": "Users",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listUsersAuto",
+          "description": "The user to invite to the group. Can specify multiple users by providing an array of their IDs from code.",
+          "placeholder": "John Smith",
+          "learnUrl": "https://api.slack.com/methods/users.identity"
+        }
+      ]
+    },
+    {
+      "name": "listChannels",
+      "viewName": "List Channels",
+      "params": [
+        {
+          "name": "SLACK_TOKEN",
+          "viewName": "Access Token",
+          "type": "vault",
+          "description": "Access token to authenticate.",
+          "learnUrl": "https://api.slack.com/authentication/token-types"
+        }
+      ]
+    },
+    {
+      "name": "listGroups",
+      "viewName": "List Groups",
+      "params": [
+        {
+          "name": "SLACK_TOKEN",
+          "viewName": "Access Token",
+          "type": "vault",
+          "description": "Access token to authenticate.",
+          "learnUrl": "https://api.slack.com/authentication/token-types"
+        }
+      ]
+    },
+    {
+      "name": "listUsers",
+      "viewName": "List Users",
+      "params": [
+        {
+          "name": "SLACK_TOKEN",
+          "viewName": "Access Token",
+          "type": "vault",
+          "description": "Access token to authenticate.",
+          "learnUrl": "https://api.slack.com/authentication/token-types"
+        }
+      ]
+    }
+  ]
 }

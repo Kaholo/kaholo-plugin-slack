@@ -1,77 +1,82 @@
-const parsers = require("./parsers");
+const kaholoPluginLibrary = require("@kaholo/plugin-library");
+const { default: axios } = require("axios");
+const slack = require("slack");
 
 const autocomplete = require("./autocomplete");
-const SlackService = require("./slack.service");
+const slackListFunctions = require("./slack-list-functions");
 
-async function sendMessageToChannel(action, settings) {
-  const { CHANNEL: channel, group, TEXT: msg } = action.params;
-  const slackService = SlackService.from(action.params, settings);
-  return slackService.sendMessage({
-    channel: parsers.autocomplete(channel),
-    group: parsers.autocomplete(group),
-    msg,
+function sendMessageToChannel({
+  slackToken: token,
+  channel,
+  text,
+}) {
+  return slack.chat.postMessage({
+    token,
+    channel,
+    text,
   });
 }
 
-async function sendMessageToUser(action, settings) {
-  const { user, group, TEXT: msg } = action.params;
-  const slackService = SlackService.from(action.params, settings);
-  return slackService.sendMessage({
-    channel: parsers.autocomplete(user),
-    group: parsers.autocomplete(group),
-    msg,
+function sendMessageToUser({
+  slackToken: token,
+  user,
+  text,
+}) {
+  return slack.chat.postMessage({
+    token,
+    channel: user,
+    text,
   });
 }
 
-async function sendIncomingWebhook(action, settings) {
-  const { webhookUrl, message } = action.params;
-  const slackService = SlackService.from(action.params, settings);
-  return slackService.sendIncomingWebhook({
-    webhookUrl: parsers.string(webhookUrl),
-    message: parsers.string(message),
+function sendIncomingWebhook({
+  webhookUrl,
+  message,
+}) {
+  return axios({
+    method: "POST",
+    url: webhookUrl,
+    body: JSON.stringify({
+      text: message,
+    }),
   });
 }
 
-async function createGroup(action, settings) {
-  const { NAME: name } = action.params;
-  const slackService = SlackService.from(action.params, settings);
-  return slackService.createGroup({
-    name: parsers.string(name),
+function createGroup({
+  slackToken: token,
+  name,
+}) {
+  return slack.usergroups.create({
+    token,
+    name,
   });
 }
 
-async function groupInvite(action, settings) {
-  const { CHANNEL: group, USER_ID: users } = action.params;
-  const slackService = SlackService.from(action.params, settings);
-  return slackService.groupInvite({
-    group: parsers.autocomplete(group),
-    users: parsers.autocompleteOrArray(users),
+async function groupInvite({
+  slackToken: token,
+  channel,
+  userId,
+}) {
+  const { users: currentUserIds } = await slack.usergroups.users.list({
+    token,
+    usergroup: channel,
+  });
+
+  return slack.usergroups.users.update({
+    token,
+    usergroup: channel,
+    users: currentUserIds.concat(userId).join(","),
   });
 }
 
-async function listChannels(action, settings) {
-  const slackService = SlackService.from(action.params, settings);
-  return slackService.listChannels();
-}
-
-async function listGroups(action, settings) {
-  const slackService = SlackService.from(action.params, settings);
-  return slackService.listGroups();
-}
-
-async function listUsers(action, settings) {
-  const slackService = SlackService.from(action.params, settings);
-  return slackService.listUsers();
-}
-
-module.exports = {
-  sendMessageToChannel,
-  sendMessageToUser,
-  sendIncomingWebhook,
-  createGroup,
-  groupInvite,
-  listChannels,
-  listGroups,
-  listUsers,
-  ...autocomplete,
-};
+module.exports = kaholoPluginLibrary.bootstrap(
+  {
+    sendMessageToChannel,
+    sendMessageToUser,
+    sendIncomingWebhook,
+    createGroup,
+    groupInvite,
+    ...slackListFunctions,
+  },
+  autocomplete,
+);

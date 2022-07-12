@@ -39,6 +39,9 @@ function sendIncomingWebhook({
     body: JSON.stringify({
       text: message,
     }),
+    headers: {
+      "Content-Type": "application/json",
+    },
   });
 }
 

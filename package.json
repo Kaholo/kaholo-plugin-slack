@@ -1,15 +1,20 @@
 {
-	"name": "kaholo-plugin-slack",
-	"version": "1.1.2",
-	"description": "Kaholo plugin for integration with Slack API.",
-	"main": "app.js",
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
-	"author": "Kaholo Group(Amit Alon)",
-	"license": "ISC",
-	"dependencies": {
-		"slack": "^11.0.2",
-		"node-fetch": "2.6.6"
-	}
+  "name": "kaholo-plugin-slack",
+  "description": "Kaholo plugin for integration with Slack API.",
+  "main": "app.js",
+  "scripts": {
+    "lint": "npx eslint .",
+    "lint:fix": "npx eslint . --fix"
+  },
+  "author": "Kaholo Group(Amit Alon)",
+  "license": "ISC",
+  "dependencies": {
+    "node-fetch": "3.2.7",
+    "slack": "11.0.2"
+  },
+  "devDependencies": {
+    "eslint": "8.19.0",
+    "eslint-config-airbnb-base": "15.0.0",
+    "eslint-plugin-import": "2.26.0"
+  }
 }

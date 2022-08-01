@@ -34,10 +34,13 @@ module.exports = class SlackService{
         if (!webhookUrl || !message) {
             throw "Didn't provide one of the required parameters.";
         }
+
+        const body = (typeof message == "string") ? {text: message} : message;
+        
         return sendHttp({
             url: webhookUrl, 
             httpMethod: "POST",
-            body: {text: message}
+            body: body
         });
     }
     

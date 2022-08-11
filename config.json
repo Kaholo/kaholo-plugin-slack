@@ -4,7 +4,7 @@
   "description": "Kaholo plugin for interaction with Slack API.",
   "execProgram": "node",
   "main": "app.js",
-  "version": "1.2.2",
+  "version": "2.0.0",
   "imgUrl": "logo.png",
   "category": "NOTIFICATIONS",
   "keywords": [

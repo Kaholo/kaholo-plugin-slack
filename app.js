@@ -1,74 +1,109 @@
 const kaholoPluginLibrary = require("@kaholo/plugin-library");
 const { default: axios } = require("axios");
-const slack = require("slack");
 
 const autocomplete = require("./autocomplete");
-const slackListFunctions = require("./slack-list-functions");
+const slackService = require("./slack-service");
 
-function sendMessageToChannel({
-  slackToken: token,
-  channel,
-  text,
-}) {
-  return slack.chat.postMessage({
-    token,
+function sendMessageToChannel(params) {
+  const {
+    slackToken,
     channel,
     text,
+  } = params;
+
+  return slackService.sendMessage({
+    token: slackToken,
+    text,
+    channel,
   });
 }
 
-function sendMessageToUser({
-  slackToken: token,
-  user,
-  text,
-}) {
-  return slack.chat.postMessage({
-    token,
+function sendMessageToUser(params) {
+  const {
+    slackToken,
+    user,
+    text,
+  } = params;
+
+  return slackService.sendMessage({
+    token: slackToken,
     channel: user,
     text,
   });
 }
 
-function sendIncomingWebhook({
-  webhookUrl,
-  message,
-}) {
-  return axios({
+async function inviteUserToGroup(params) {
+  const {
+    slackToken,
+    channel,
+    userId,
+  } = params;
+
+  const currentUserIds = await slackService.listUsersInGroup({
+    token: slackToken,
+    usergroup: channel,
+  });
+
+  return slackService.updateUsersInGroup({
+    token: slackToken,
+    usergroup: channel,
+    users: currentUserIds.concat(userId).join(","),
+  });
+}
+
+async function sendIncomingWebhook(params) {
+  const {
+    webhookUrl,
+    message,
+  } = params;
+
+  const { data } = await axios({
     method: "POST",
     url: webhookUrl,
-    body: JSON.stringify({
+    data: {
       text: message,
-    }),
+    },
     headers: {
       "Content-Type": "application/json",
     },
   });
+
+  return data;
 }
 
-function createGroup({
-  slackToken: token,
-  name,
-}) {
-  return slack.usergroups.create({
-    token,
-    name,
+function createGroup(params) {
+  const {
+    slackToken,
+    name: groupName,
+  } = params;
+
+  return slackService.createGroup({
+    token: slackToken,
+    name: groupName,
   });
 }
 
-async function groupInvite({
-  slackToken: token,
-  channel,
-  userId,
-}) {
-  const { users: currentUserIds } = await slack.usergroups.users.list({
-    token,
-    usergroup: channel,
-  });
+function listChannels(params) {
+  const { slackToken } = params;
 
-  return slack.usergroups.users.update({
-    token,
-    usergroup: channel,
-    users: currentUserIds.concat(userId).join(","),
+  return slackService.listChannels({
+    token: slackToken,
+  });
+}
+
+function listGroups(params) {
+  const { slackToken } = params;
+
+  return slackService.listGroups({
+    token: slackToken,
+  });
+}
+
+function listUsers(params) {
+  const { slackToken } = params;
+
+  return slackService.listUsers({
+    token: slackToken,
   });
 }
 
@@ -76,10 +111,12 @@ module.exports = kaholoPluginLibrary.bootstrap(
   {
     sendMessageToChannel,
     sendMessageToUser,
+    groupInvite: inviteUserToGroup,
     sendIncomingWebhook,
     createGroup,
-    groupInvite,
-    ...slackListFunctions,
+    listChannels,
+    listGroups,
+    listUsers,
   },
   autocomplete,
 );

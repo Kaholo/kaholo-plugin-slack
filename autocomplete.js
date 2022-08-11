@@ -1,5 +1,5 @@
 const _ = require("lodash");
-const slackListFunctions = require("./slack-list-functions");
+const slackService = require("./slack-service");
 
 function createAutocompleteFromListFunction(listFunction, dataPath) {
   return async (query, params) => {
@@ -16,7 +16,16 @@ function createAutocompleteFromListFunction(listFunction, dataPath) {
 }
 
 module.exports = {
-  listChannelsAuto: createAutocompleteFromListFunction(slackListFunctions.listChannels, "channels"),
-  listGroupsAuto: createAutocompleteFromListFunction(slackListFunctions.listGroups, "usergroups"),
-  listUsersAuto: createAutocompleteFromListFunction(slackListFunctions.listUsers, "members"),
+  listChannelsAuto: createAutocompleteFromListFunction(
+    ({ slackToken }) => slackService.listChannels({ token: slackToken }),
+    "channels",
+  ),
+  listGroupsAuto: createAutocompleteFromListFunction(
+    ({ slackToken }) => slackService.listGroups({ token: slackToken }),
+    "usergroups",
+  ),
+  listUsersAuto: createAutocompleteFromListFunction(
+    ({ slackToken }) => slackService.listUsers({ token: slackToken }),
+    "members",
+  ),
 };

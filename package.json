@@ -9,9 +9,9 @@
   "author": "Kaholo Group(Amit Alon)",
   "license": "ISC",
   "dependencies": {
-    "@kaholo/plugin-library": "^2.0.0",
-    "axios": "^0.27.2",
-    "lodash": "^4.17.21",
+    "@kaholo/plugin-library": "^2.1.0",
+    "axios": "0.27.2",
+    "lodash": "4.17.21",
     "slack": "11.0.2"
   },
   "devDependencies": {

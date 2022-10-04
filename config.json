@@ -1,20 +1,23 @@
 {
   "name": "Slack",
+  "viewName": "Slack",
   "type": "executer",
-  "description": "Kaholo plugin for interaction with Slack API.",
+  "description": "Send Slack messenging application notifications",
   "execProgram": "node",
   "main": "app.js",
-  "version": "1.2.2",
+  "version": "2.0.0",
   "imgUrl": "logo.png",
-  "category": "NOTIFICATIONS",
+  "category": "Notifications",
   "keywords": [
     "msg",
-    "notification",
     "notifications",
-    "message",
     "messages",
     "communication",
     "group",
+    "channel",
+    "sms",
+    "instant",
+    "messenger",
     "send"
   ],
   "auth": {
@@ -47,7 +50,7 @@
         },
         {
           "name": "text",
-          "viewName": "Text",
+          "viewName": "Message",
           "type": "text",
           "description": "Message content.",
           "placeholder": "This is the message.",
@@ -71,7 +74,7 @@
         },
         {
           "name": "text",
-          "viewName": "Text",
+          "viewName": "Message",
           "type": "text",
           "description": "Message content.",
           "placeholder": "This is the message.",
@@ -107,7 +110,7 @@
       "params": [
         {
           "name": "name",
-          "viewName": "Name",
+          "viewName": "Group Name",
           "type": "string",
           "description": "Name for the created group.",
           "placeholder": "group-name",
@@ -121,7 +124,7 @@
       "params": [
         {
           "name": "channel",
-          "viewName": "Group",
+          "viewName": "Group Name",
           "type": "autocomplete",
           "autocompleteType": "function",
           "functionName": "listGroupsAuto",

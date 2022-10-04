@@ -132,7 +132,3 @@ dist
 .yarn/install-state.gz
 .pnp.*
 .kaholotmp
-
-# lock files
-yarn.lock
-package-lock.json

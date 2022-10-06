@@ -1,44 +1,45 @@
 {
   "name": "Slack",
+  "viewName": "Slack",
   "type": "executer",
-  "description": "Kaholo plugin for interaction with Slack API.",
+  "description": "Send Slack messenging application notifications",
   "execProgram": "node",
   "main": "app.js",
-  "version": "1.2.2",
+  "version": "2.0.0",
   "imgUrl": "logo.png",
-  "category": "NOTIFICATIONS",
+  "category": "Notifications",
   "keywords": [
     "msg",
-    "notification",
     "notifications",
-    "message",
     "messages",
     "communication",
     "group",
+    "channel",
+    "sms",
+    "instant",
+    "messenger",
     "send"
   ],
-  "settings": [
-    {
-      "name": "SLACK_TOKEN",
-      "viewName": "Access Token",
-      "type": "vault",
-      "description": "Default Slack access token to use for authentication if no other token was provided."
-    }
-  ],
+  "auth": {
+    "authId": "slackAccount",
+    "params": [
+      {
+        "name": "slackToken",
+        "viewName": "Bot User OAuth Token",
+        "type": "vault",
+        "description": "Access token to authenticate.",
+        "learnUrl": "https://api.slack.com/authentication/token-types",
+        "required": true
+      }
+    ]
+  },
   "methods": [
     {
       "name": "sendMessageToChannel",
       "viewName": "Send Message To Channel",
       "params": [
         {
-          "name": "SLACK_TOKEN",
-          "viewName": "Access Token",
-          "type": "vault",
-          "description": "Access token to authenticate.",
-          "learnUrl": "https://api.slack.com/authentication/token-types"
-        },
-        {
-          "name": "CHANNEL",
+          "name": "channel",
           "viewName": "Channel",
           "type": "autocomplete",
           "autocompleteType": "function",
@@ -48,8 +49,8 @@
           "learnUrl": "https://api.slack.com/types/channel"
         },
         {
-          "name": "TEXT",
-          "viewName": "Text",
+          "name": "text",
+          "viewName": "Message",
           "type": "text",
           "description": "Message content.",
           "placeholder": "This is the message.",
@@ -62,13 +63,6 @@
       "viewName": "Send Private Message To User",
       "params": [
         {
-          "name": "SLACK_TOKEN",
-          "viewName": "Access Token",
-          "type": "vault",
-          "description": "Access token to authenticate.",
-          "learnUrl": "https://api.slack.com/authentication/token-types"
-        },
-        {
           "name": "user",
           "viewName": "Recipient User",
           "type": "autocomplete",
@@ -79,8 +73,8 @@
           "learnUrl": "https://api.slack.com/types/user"
         },
         {
-          "name": "TEXT",
-          "viewName": "Text",
+          "name": "text",
+          "viewName": "Message",
           "type": "text",
           "description": "Message content.",
           "placeholder": "This is the message.",
@@ -115,15 +109,8 @@
       "viewName": "Create User Group",
       "params": [
         {
-          "name": "SLACK_TOKEN",
-          "viewName": "Access Token",
-          "type": "vault",
-          "description": "Access token to authenticate.",
-          "learnUrl": "https://api.slack.com/authentication/token-types"
-        },
-        {
-          "name": "NAME",
-          "viewName": "Name",
+          "name": "name",
+          "viewName": "Group Name",
           "type": "string",
           "description": "Name for the created group.",
           "placeholder": "group-name",
@@ -136,15 +123,8 @@
       "viewName": "Add Users To User Group",
       "params": [
         {
-          "name": "SLACK_TOKEN",
-          "viewName": "Access Token",
-          "type": "vault",
-          "description": "Access token to authenticate.",
-          "learnUrl": "https://api.slack.com/authentication/token-types"
-        },
-        {
-          "name": "CHANNEL",
-          "viewName": "Group",
+          "name": "channel",
+          "viewName": "Group Name",
           "type": "autocomplete",
           "autocompleteType": "function",
           "functionName": "listGroupsAuto",
@@ -153,7 +133,7 @@
           "learnUrl": "https://api.slack.com/types/group"
         },
         {
-          "name": "USER_ID",
+          "name": "userId",
           "viewName": "Users",
           "type": "autocomplete",
           "autocompleteType": "function",
@@ -167,41 +147,17 @@
     {
       "name": "listChannels",
       "viewName": "List Channels",
-      "params": [
-        {
-          "name": "SLACK_TOKEN",
-          "viewName": "Access Token",
-          "type": "vault",
-          "description": "Access token to authenticate.",
-          "learnUrl": "https://api.slack.com/authentication/token-types"
-        }
-      ]
+      "params": []
     },
     {
       "name": "listGroups",
       "viewName": "List Groups",
-      "params": [
-        {
-          "name": "SLACK_TOKEN",
-          "viewName": "Access Token",
-          "type": "vault",
-          "description": "Access token to authenticate.",
-          "learnUrl": "https://api.slack.com/authentication/token-types"
-        }
-      ]
+      "params": []
     },
     {
       "name": "listUsers",
       "viewName": "List Users",
-      "params": [
-        {
-          "name": "SLACK_TOKEN",
-          "viewName": "Access Token",
-          "type": "vault",
-          "description": "Access token to authenticate.",
-          "learnUrl": "https://api.slack.com/authentication/token-types"
-        }
-      ]
+      "params": []
     }
   ]
 }
